@@ -1,5 +1,6 @@
 package controller_qna;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,13 +18,23 @@ public class QnaViewController implements Controller {
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
 		//관리자인 경우에는 모든 사용자의 문의목록 읽어옴.
 		HttpSession session = request.getSession();
-		String grade = (String) session.getAttribute("grade");
-		
+		if(session.getAttribute("login") == null || !(boolean)session.getAttribute("login")) {
+			try {
+				response.getWriter().write("<script>alert('로그인이 필요합니다');location.href='"+session.getAttribute("lastBoard")+"';</script>");
+				return null;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		String param = "";
 		if(request.getQueryString()!=null) {
 			param += "?"+request.getQueryString();
 		}
 		session.setAttribute("last", request.getRequestURI()+param);
+		System.out.println("last : " + session.getAttribute("last"));
+		
+		String grade = (String) session.getAttribute("grade");
 		
 		ModelAndView view = null;
 		if(grade.equals("master")) {

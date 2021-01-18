@@ -1,9 +1,11 @@
 package controller_board;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import controller.Controller;
 import dto.BoardDTO;
@@ -15,6 +17,13 @@ public class BoardViewController implements Controller {
 
 	@Override
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
+		HttpSession session = request.getSession();
+		String param = "";
+		if(request.getQueryString()!=null) {
+			param += "?"+request.getQueryString();
+		}
+		session.setAttribute("last", request.getRequestURI()+param);
+		System.out.println("last : " + session.getAttribute("last"));
 		BoardDTO dto = null;
 		int bno = 0;
 		

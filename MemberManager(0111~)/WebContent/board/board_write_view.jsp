@@ -74,7 +74,7 @@
 </style>
 </head>
 <body>
-	<c:if test="${sessionScope.login == null or sessionScope.login == false }">
+	<%-- <c:if test="${sessionScope.login == null or sessionScope.login == false }">
 		<script>
 			alert("로그인이 필요합니다");
 			history.back();
@@ -88,24 +88,7 @@
 			<c:set var="last" value="${pageContext.request.requestURI}" scope="session" />
 		</c:otherwise>
 	</c:choose>
-	<c:out value="last:${last}"/>
-	<%-- <c:choose>
-		<c:when test="${sessionScope.login == null or sessionScope.login == false }">
-			<script>
-				alert("로그인을 해주세요");
-				history.back();
-			</script>
-		</c:when>
-		<c:otherwise>
-		<%
-			String param = "";
-			if(request.getQueryString()!=null) {
-				param += "?"+request.getQueryString();
-			}
-			session.setAttribute("last", request.getRequestURI()+param);
-	 	%>
-		</c:otherwise>
-	</c:choose> --%>
+	<c:out value="last:${last}"/> --%>
 	
 	<div id="container">
 		<jsp:include page="/template/header.jsp" flush="false"></jsp:include>

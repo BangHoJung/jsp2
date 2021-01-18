@@ -122,29 +122,28 @@
 </style>
 </head>
 <body>
-	<%
-		if(session.getAttribute("login")==null || !(boolean)session.getAttribute("login")) {
-			%>
-			<script>
-				alert("로그인이 필요합니다");
-				location.href="<%=request.getContextPath()%>/index.jsp";
-			</script>
-			<%
-		}
-		
-		String param = "";
-		if(request.getQueryString()!=null) {
-			param += "?"+request.getQueryString();
-		}
-		session.setAttribute("last", request.getRequestURI()+param);
-	%>
+	<c:if test="${sessionScope.login == null or sessionScope.login == false }">
+		<script>
+			alert("로그인이 필요합니다");
+			location.href="${sessionScope.lastBoard}";
+		</script>
+	</c:if>
+	<c:choose>
+		<c:when test="${pageContext.request.queryString != null }">
+			<c:set var="last" value="${pageContext.request.requestURI}?${pageContext.request.queryString }" scope="session" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="last" value="${pageContext.request.requestURI}" scope="session" />
+		</c:otherwise>
+	</c:choose>
+	<c:out value="last:${last}"/>
 
 	<div id="container">
 		<jsp:include page="/template/header.jsp" flush="false"></jsp:include>
 		
 		<nav>
 			<div id="qna_form">
-				<form action="<%=request.getContextPath() %>/register_qna.do" method="post">
+				<form action="register_qna.do" method="post">
 					<table>
 						<tr>
 							<td><input type="text" name="title" placeholder="문의 제목"></td>

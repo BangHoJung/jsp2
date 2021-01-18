@@ -1,5 +1,19 @@
 package controller;
 
+import controller_board.BoardViewController;
+import controller_board.InsertBoardController;
+import controller_board.WriteBoardViewController;
+import controller_member.InsertMemberController;
+import controller_member.LoginController;
+import controller_member.LogoutController;
+import controller_member.UpdateMemberController;
+import controller_member.UpdateViewController;
+import controller_qna.InsertQnaController;
+import controller_qna.NextQnaListController;
+import controller_qna.QnaMasterViewController;
+import controller_qna.QnaViewController;
+import controller_qna.UpdateQnaResponseController;
+
 public class HandlerMapping {
 	
 	private static HandlerMapping instance = new HandlerMapping();
@@ -17,6 +31,9 @@ public class HandlerMapping {
 		Controller controller = null;
 		
 		switch(command) {
+		case "main.do":
+			controller = new MainController();
+			break;
 		case "login.do":
 			controller = new LoginController();
 			break;
@@ -46,6 +63,15 @@ public class HandlerMapping {
 			break;
 		case "update_qna_response.do":
 			controller = new UpdateQnaResponseController();
+			break;
+		case "write_board_view.do":
+			controller = new WriteBoardViewController();
+			break;
+		case "insert_board.do":
+			controller = new InsertBoardController();
+			break;
+		case "board_view.do":
+			controller = new BoardViewController();
 			break;
 		}
 		return controller;

@@ -43,7 +43,7 @@
 
 	<header>
 		<ul>
-			<li><a href="<%=request.getContextPath() %>/index.jsp">HOME</a></li>
+			<li><a href="index.jsp">HOME</a></li>
 			<%
 				boolean flag = false;
 				if(session.getAttribute("login") != null)  {
@@ -53,8 +53,8 @@
 					String name = (String)session.getAttribute("name");
 					String grade = (String)session.getAttribute("grade");
 					%>
-					<li><a href="<%=request.getContextPath() %>/logout.do">로그아웃</a></li>
-					<li><a href="<%=request.getContextPath() %>/update_view.do">회원정보변경</a></li>
+					<li><a href="logout.do">로그아웃</a></li>
+					<li><a href="update_view.do">회원정보변경</a></li>
 					<%
 					if(grade.equals("master") ) {
 						%>
@@ -62,7 +62,7 @@
 						<%
 					}
 					%>
-					<li><a href="<%=request.getContextPath() %>/qna_view.do">문의하기</a></li>
+					<li><a href="qna_view.do">문의하기</a></li>
 					<!-- div로 구성해서 따로 배치 -->
 					<li id="name"><img src="<%=request.getContextPath() %>/img/${sessionScope.grade}.png"><span>${sessionScope.name}님 로그인 하셨습니다.</span></li>
 					<%
@@ -72,7 +72,7 @@
 					<li><a href="<%=request.getContextPath() %>/member/register.jsp">회원가입</a></li>
 					<li><a href="<%=request.getContextPath() %>/member/login.jsp">로그인</a></li>
 					<li><a href="#">회원관리</a></li>
-					<li><a href="#">문의하기</a></li>
+					<li><a href="qna_view.do">문의하기</a></li>
 					<%
 				}
 				%>

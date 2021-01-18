@@ -1,6 +1,7 @@
 <%@page import="service.MemberService"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,30 +74,45 @@
 </style>
 </head>
 <body>
-	<%
-		if(session.getAttribute("login") == null || (boolean) session.getAttribute("login")==false){
-			%>
-				<script>
-					alert("로그인을 해주세요");
-					<%-- location.href="<%=request.getContextPath()%>/index.jsp"; --%>
-					history.back();
-				</script>
-			<%
-		}
-		else {
+	<c:if test="${sessionScope.login == null or sessionScope.login == false }">
+		<script>
+			alert("로그인이 필요합니다");
+			history.back();
+		</script>
+	</c:if>
+	<c:choose>
+		<c:when test="${pageContext.request.queryString != null }">
+			<c:set var="last" value="${pageContext.request.requestURI}?${pageContext.request.queryString }" scope="session" />
+		</c:when>
+		<c:otherwise>
+			<c:set var="last" value="${pageContext.request.requestURI}" scope="session" />
+		</c:otherwise>
+	</c:choose>
+	<c:out value="last:${last}"/>
+	<%-- <c:choose>
+		<c:when test="${sessionScope.login == null or sessionScope.login == false }">
+			<script>
+				alert("로그인을 해주세요");
+				history.back();
+			</script>
+		</c:when>
+		<c:otherwise>
+		<%
 			String param = "";
 			if(request.getQueryString()!=null) {
 				param += "?"+request.getQueryString();
 			}
 			session.setAttribute("last", request.getRequestURI()+param);
-		}
-	%>
+	 	%>
+		</c:otherwise>
+	</c:choose> --%>
+	
 	<div id="container">
 		<jsp:include page="/template/header.jsp" flush="false"></jsp:include>
 		
 		<nav>
 			<h2>글쓰기 페이지</h2>
-		<form action="process/board_write_process.jsp" method="post">
+		<form action="insert_board.do" method="post">
 			<table>
 				<tr>
 					<th>제목</th>
@@ -105,15 +121,15 @@
 				<tr>
 					<th>작성자</th>
 					<td>
-						<input type="hidden" name="writer" value="<%=session.getAttribute("id")%>">
-						<%=session.getAttribute("id")%>					
+						<input type="hidden" name="writer" value="${sessionScope.id}">
+						${sessionScope.id}					
 					</td>
 				</tr>
 				<tr>
 					<th style="vertical-align: top;">내용</th><td><textarea name="content"></textarea></td>
 				</tr>
 				<tr>
-					<th><a href="<%=session.getAttribute("lastBoard") %>" class="btn">목록보기</a></th>
+					<th><a href="${sessionScope.lastBoard}" class="btn">목록보기</a></th>
 					<td style="text-align: right;">
 						<a href="javascript:history.back();" class="btn">뒤로가기</a>
 						<button class="btn" type="submit">글쓰기</button>

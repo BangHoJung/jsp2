@@ -1,0 +1,52 @@
+-사용자 이메일,이름 설정
+git config --global user.email "메일주소"
+git config --global user.name "닉네임"
+
+버전관리할 폴더 설정
+-현재폴더로 설정
+git init . 
+
+-현재 깃의 상태,작업이 이루어진 파일
+git status
+
+-버전관리할 파일 추가
+git add "파일명"
+
+-버전 만들기(완료)
+-- 추가된 깃에 대해서 완료설정
+git commit -m "커밋 메시지"
+-- 기존에 추가된 파일중 변경된 내용 모두 자동으로 완료설정
+git commit -am "커밋 메시지" 
+-- 텍스트 편집기로 커밋 메시지 작성 후 커밋
+git commit --edit
+
+-
+git push origin "branch명"
+
+-로그 출력
+git log
+
+-이전버전으로 돌아감
+git checkout "commit아이디"
+
+-다시 최신버전으로 돌아옴
+git checkout master
+
+-깃허브에서 내폴더로 깃 다운로드
+--깃주소를 폴더에 등록함
+git remote add origin "깃주소"
+--remote된 깃을 확인
+git remote -v
+--가져온 깃주소를 내폴더에 패치시킴(다운로드 준비)
+git fetch
+--fetch에서 확인한 branch명으로 git을 폴더에 다운로드
+git pull origin "branch명"
+
+-현재 branch들 확인
+git branch
+
+-사용할 branch 추가
+git branch -M "branch명"
+
+-기존 접속정보 삭제
+git remote rm "접속정보"

@@ -79,4 +79,12 @@ public class PagingVO {
 	public boolean isNextPageGroup() {
 		return getCurrPageGroup() < getTotalPageGroup();
 	}
+
+	@Override
+	public String toString() {
+		return "PagingVO [countAll=" + countAll + ", countPageContent=" + countPageContent + ", countPageGroup="
+				+ countPageGroup + ", currPage=" + currPage + "]";
+	}
+	
+	
 }

@@ -8,7 +8,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<%-- <c:set var="login" value="${false}" scope="session"/> --%>
 	<script type="text/javascript">
 		location.href="main.do";
 	</script>

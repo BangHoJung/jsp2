@@ -141,15 +141,6 @@
 </style>
 </head>
 <body>
-	<%-- <c:choose>
-		<c:when test="${pageContext.request.queryString != null }">
-			<c:set var="last" value="main.do?${pageContext.request.queryString }" scope="session" />
-		</c:when>
-		<c:otherwise>
-			<c:set var="last" value="main.do" scope="session" />
-		</c:otherwise>
-	</c:choose>
-	<c:out value="last:${last}"/> --%>
 	
 	<div id="container">
 		<jsp:include page="/template/header.jsp" flush="false"></jsp:include>

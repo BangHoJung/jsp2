@@ -3,6 +3,7 @@
 	<item key="J2EE_EXPORT_OVERWRITE" value="false"/>
 	<item key="J2EE_EXPORT_SOURCE" value="true"/>
 	<list key="MRU_RUNTIME_STORE">
+		<item value="tomcat8"/>
 		<item value="tomcat8.5"/>
 	</list>
 	<list key="J2EE_IMPORT_null">

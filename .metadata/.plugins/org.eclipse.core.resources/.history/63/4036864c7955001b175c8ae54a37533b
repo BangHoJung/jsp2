@@ -1,0 +1,16 @@
+package batch;
+
+import org.quartz.Job;
+
+public class CronTriggerMaker {
+	private String timer; //크론 표현식
+	private Class<? extends Job> job;
+	
+	public CronTriggerMaker(String timer, Class<? extends Job> job) {
+		super();
+		this.timer = timer;
+		this.job = job;
+	}
+	
+	
+}

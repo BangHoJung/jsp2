@@ -1,0 +1,21 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.EmployeeService;
+
+public class SearchEmployeeController implements Controller {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		String kind = request.getParameter("kind");
+		String text = request.getParameter("text");
+		
+		EmployeeService.getInstance().searchEmployee(kind,text);
+		
+		
+		
+	}
+
+}

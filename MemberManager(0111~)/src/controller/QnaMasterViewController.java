@@ -9,13 +9,16 @@ import javax.websocket.Session;
 import dto.QnaDTO;
 import model.ModelAndView;
 import service.BoardService;
+import service.MemberService;
 
 public class QnaMasterViewController implements Controller {
 
 	@Override
 	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
 		int qid = Integer.parseInt(request.getParameter("qid"));
-		QnaDTO dto = BoardService.getInstance().searchQnaDTO(qid);
+		int status = Integer.parseInt(request.getParameter("status"));
+		if(status == 0) status = 1;
+		QnaDTO dto = BoardService.getInstance().searchQnaDTO(qid,status);
 		
 		ModelAndView view = null;
 		

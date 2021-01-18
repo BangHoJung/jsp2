@@ -1,0 +1,19 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dto.QnaDTO;
+import model.ModelAndView;
+import service.BoardService;
+
+public class QnaMasterBoardController implements Controller {
+
+	@Override
+	public ModelAndView execute(HttpServletRequest request, HttpServletResponse response) {
+		String qid = request.getParameter("qid");
+		QnaDTO dto = BoardService.getInstance().searchQna(qid);
+		return null;
+	}
+
+}

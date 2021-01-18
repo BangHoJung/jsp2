@@ -1,0 +1,40 @@
+package config;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+public class DBManager {
+	private static DBManager instance = new DBManager();
+	private Connection conn;
+	private DataSource source;
+      
+	private DBManager() {
+		Context initContext = new InitialContext();
+		Context envContext  = (Context)initContext.lookup("java:/comp/env");
+		source = (DataSource)envContext.lookup("jdbc/myoracle");
+	}
+
+	public static DBManager getInstance() {
+		if(instance == null)
+			instance= new DBManager();
+		return instance;
+	}
+	
+	public void close(PreparedStatement pstmt, ResultSet rs) {
+		try {
+			if(rs != null)
+			rs.close();
+			if(pstmt != null)
+			pstmt.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+}

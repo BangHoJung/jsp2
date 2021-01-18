@@ -425,4 +425,23 @@ public class BoardDAO {
 		
 		return count;
 	}
+
+	public int updateQnaStatus(int qid,int status) {
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE qna SET status = ? WHERE qid=?";
+		int count = 0;
+		try {
+			pstmt = manager.getConn().prepareStatement(sql);
+			pstmt.setInt(1, status);
+			pstmt.setInt(2, qid);
+			count = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			manager.close(pstmt, null);
+		}
+		
+		return count;
+	}
 }

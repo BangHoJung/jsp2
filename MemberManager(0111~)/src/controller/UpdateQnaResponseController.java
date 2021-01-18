@@ -16,7 +16,7 @@ public class UpdateQnaResponseController implements Controller {
 		String answer = request.getParameter("response");
 		
 		ModelAndView view = null;
-		int count = BoardService.getInstance().updateQnaResponse(qid,answer);
+		int count = BoardService.getInstance().updateQnaResponse(qid,answer,2);
 		if(count == 0) {
 			try {
 				response.getWriter().write("<script>alert('답변 등록에 실패했습니다');location.href='qna_master_view.do';");

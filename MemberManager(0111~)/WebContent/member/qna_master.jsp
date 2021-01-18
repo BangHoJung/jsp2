@@ -35,7 +35,8 @@
 					var result="";
 					for(i=0;i<json.array.length;i++) {
 						result+="<tr>";
-						result+="<td><a href='qna_master_view.do?qid="+json.array[i].qid+"'>"+json.array[i].title	+"</a></td>";
+						result+="<td><a href='qna_master_view.do?qid="+json.array[i].qid+"&status="+json.array[i].status
+								+"'>"+json.array[i].title	+"</a></td>";
 						result+="<td>"+json.array[i].writer+"</td>";
 						result+="<td>"+json.array[i].qdate+"</td>";
 						if(json.array[i].status == 0) {

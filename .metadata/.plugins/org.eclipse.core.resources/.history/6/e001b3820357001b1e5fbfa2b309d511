@@ -1,0 +1,39 @@
+package service;
+
+import dao.EmployeeDAO;
+import dto.EmployeeDTO;
+
+public class EmployeeService {
+	private static EmployeeService instance = new EmployeeService();
+	private EmployeeDAO dao;
+	private EmployeeService() {
+		dao = EmployeeDAO.getInstance();
+	}
+	
+	public static EmployeeService getInstance() {
+		if(instance == null) instance = new EmployeeService();
+		return instance;
+	}
+
+	public EmployeeDTO loginEmployee(String eno, String name) {
+		return dao.loginEmployee(eno,name);
+	}
+
+	public Object getPositionName(int position) {
+		return dao.getPositionName(position);
+	}
+
+	public void searchEmployee(String kind, String text) {
+		if(kind.equals("name")) {
+			
+		}
+		else if(kind.equals("eno")) {
+			
+		}
+		else {
+			
+		}
+		
+	}
+	
+}

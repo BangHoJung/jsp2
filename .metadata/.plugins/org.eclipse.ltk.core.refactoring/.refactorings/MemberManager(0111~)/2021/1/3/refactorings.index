@@ -1,0 +1,21 @@
+1610428511118	Rename resource 'index.jsp'
+1610428536382	Rename resource 'main.jsp'
+1610440269162	Delete element
+1610496866483	Rename type 'InsertMemberController'
+1610501918709	Delete element
+1610507046278	Rename type 'RegisterController'
+1610508341917	Rename type 'RegisterQnaController'
+1610508353948	Rename type 'RegisterMemberController'
+1610515345048	Rename type 'SearchQnaController'
+1610584389504	Rename type 'QnaSchedular'
+1610586980745	Rename type 'SNAQJob'
+1610586985276	Delete element
+1610606670111	Copy file
+1610610015837	Rename resource 'qna_master_view.jsp'
+1610677925729	Rename resource 'qna_master_board.jsp'
+1610677953278	Rename type 'QnaMasterBoardController'
+1610682369577	Delete element
+1610690427920	Copy file
+1610690462621	Copy files
+1610690480507	Copy file
+1610691298530	Copy compilation unit

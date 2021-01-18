@@ -1,0 +1,15 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<input type="checkbox" value="체크1"> 
+	<input type="checkbox" value="체크2"> 
+	<input type="checkbox" value="체크3"> 
+	<input type="checkbox" value="체크4"> 
+</body>
+</html>

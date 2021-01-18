@@ -1,0 +1,33 @@
+package controller;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import dto.EmployeeDTO;
+import service.EmployeeService;
+
+public class LoginController implements Controller {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		String name = request.getParameter("name");
+		int eno = Integer.parseInt(request.getParameter("eno"));
+		EmployeeDTO dto = EmployeeService.getInstance().loginEmployee(eno,name);
+		
+		if(dto == null) {
+			try {
+				response.getWriter().write("<script>alert('입력하신 정보를 확인하세요');location.href='login.jsp';</script>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else {
+			request.setAttribute("dto", dto);
+			request.getRequestDispatcher("").forward(request, response);
+		}
+	}
+
+}

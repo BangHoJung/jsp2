@@ -84,13 +84,21 @@ public class BoardService {
 		return dao.searchNoAnswerQnaList();
 	}
 
-	public QnaDTO searchQnaDTO(int qid) {
+	public QnaDTO searchQnaDTO(int qid,int status) {
+		int count = dao.updateQnaStatus(qid, status);
+		if(count == 0) {
+			return null;
+		}
 		return dao.searchQnaDTO(qid);
 	}
 
-	public int updateQnaResponse(int qid, String answer) {
+	public int updateQnaResponse(int qid, String answer,int status) {
 		int count = dao.updateQnaResponse(qid,answer);
+		if(count != 0) {
+			count = dao.updateQnaStatus(qid, status);
+		}
 		return count;
 	}
+
 
 }

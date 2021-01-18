@@ -1,0 +1,18 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.EmployeeService;
+
+public class LoginController implements Controller {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		// TODO Auto-generated method stub
+		String name = request.getParameter("name");
+		int eno = Integer.parseInt(request.getParameter("eno"));
+		EmployeeService.getInstance().loginEmployee(eno,name);
+	}
+
+}

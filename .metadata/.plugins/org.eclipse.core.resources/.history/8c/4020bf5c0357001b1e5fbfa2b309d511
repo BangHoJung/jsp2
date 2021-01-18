@@ -1,0 +1,24 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class SearchEmployeeController implements Controller {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		String kind = request.getParameter("kind");
+		
+		if(kind.equals("name")) {
+			
+		}
+		else if(kind.equals("eno")) {
+			
+		}
+		else {
+			
+		}
+		
+	}
+
+}

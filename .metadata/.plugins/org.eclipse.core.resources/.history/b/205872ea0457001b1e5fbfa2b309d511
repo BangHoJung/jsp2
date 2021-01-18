@@ -1,0 +1,16 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class InsertEmployeeController implements Controller {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		String eno = request.getParameter("eno");
+		String name = request.getParameter("name");
+		String department = request.getParameter("department");
+		int position = Integer.parseInt(request.getParameter("position"));
+	}
+
+}

@@ -1,0 +1,28 @@
+package controller;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import service.EmployeeService;
+
+public class InsertEmployeeController implements Controller {
+
+	@Override
+	public void execute(HttpServletRequest request, HttpServletResponse response) {
+		String eno = request.getParameter("eno");
+		String name = request.getParameter("name");
+		String department = request.getParameter("department");
+		int position = Integer.parseInt(request.getParameter("position"));
+		int salary = Integer.parseInt(request.getParameter("salary"));
+		
+		int count = EmployeeService.getInstance().insertEmployee(eno,name,department,position,salary);
+		
+		if(count==-1) {
+			
+		}
+		else if(count==1) {
+			
+		}
+	}
+
+}

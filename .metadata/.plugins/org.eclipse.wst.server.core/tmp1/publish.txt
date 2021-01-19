@@ -1,4 +1,0 @@
-#Tomcat publish data
-#Mon Jan 18 17:51:34 KST 2021
-org.eclipse.jst.jee.server\:FileTest=C\:\\java\\tomcat8\\webapps\\FileTest
-org.eclipse.jst.jee.server\:MemberManager(0111~)=C\:\\java\\tomcat8\\webapps\\MemberManager(0111~)

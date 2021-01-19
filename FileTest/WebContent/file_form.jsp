@@ -13,5 +13,5 @@
 		작성자 : <input type="text" name="param"><br>
 		<button>업로드</button>
 	</form>
-</body>
+</body> 
 </html>

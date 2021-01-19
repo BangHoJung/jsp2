@@ -1,6 +1,0 @@
-package model;
-
-public class ModelAndView {
-	private String page; //이동할 페이지 경로
-	private boolean sendRedirect;  //전송 방법
-}

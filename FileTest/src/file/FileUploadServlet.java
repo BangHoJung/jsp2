@@ -76,6 +76,11 @@ public class FileUploadServlet extends HttpServlet {
 						request.setAttribute("fileName"+i, fileName);
 						request.setAttribute("item"+i, item);
 						request.setAttribute("uploadFile"+i, uploadFile);
+						
+						String root = request.getSession().getServletContext().getRealPath("/") + "/upload/";
+						String name = fileName;
+						FileDTO dto = new FileDTO(new File(root + "\\" + name));
+						request.setAttribute("dto"+i, dto);
 					}
 				}
 			}

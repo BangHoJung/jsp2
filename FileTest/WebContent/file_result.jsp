@@ -11,9 +11,14 @@
 	${requestScope.file0 } <br>
 	<%-- <a href="${requestScope.file0 }" download>파일 다운로드</a><br> --%>
 	<a href="file_download.jsp?file=${requestScope.fileName0 }" >파일 다운로드</a><br>
-	<c:if test="${requestScope.item0.contentType.split('/')[0] == 'image' }">
-		<span><img src="${requestScope.file0 }"></span><br>
-	</c:if>
+	<c:choose>
+		<c:when test="${requestScope.dto0.type == 'image' }">
+			<img src="${requestScope.dto0.path }">
+		</c:when>
+		<c:otherwise>
+			<a href="file_download.jsp?file=${requestScope.dto0.fileName }">파일 다운로드</a>
+		</c:otherwise>
+	</c:choose>
 	${requestScope.file1 } <br>
 	<a href="${requestScope.file1 }" download>파일 다운로드</a><br>
 </body>

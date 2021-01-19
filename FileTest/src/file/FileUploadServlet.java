@@ -2,6 +2,7 @@ package file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -14,6 +15,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.jni.Directory;
 
 /**
  * Servlet implementation class FileUploadServlet
@@ -34,26 +36,27 @@ public class FileUploadServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String encoding = "utf-8";
-		File filePath = new File(request.getSession().getServletContext().getRealPath("/")+"/upload");
-		System.out.println(filePath.getAbsolutePath());
-		System.out.println(filePath.toURI());
 		
-		if(!filePath.exists()) {
-			filePath.mkdirs(); //해당경로까지 모든 폴더를 다 만들어줌
-		}
+		String encoding = "utf-8";
+		String path="C:\\fileupload";
+		File userPath = new File(path);
 		
 		DiskFileItemFactory factory = new DiskFileItemFactory();
-		factory.setRepository(filePath); // 업로드될 폴더
+		factory.setRepository(userPath); // 업로드될 폴더
 		factory.setSizeThreshold(1024 * 1024); // 1MB
 		ServletFileUpload upload = new ServletFileUpload(factory);
 		
 		try {
 			List<FileItem> list = upload.parseRequest(request); 
+			ArrayList<FileDTO> req_list = new  ArrayList<FileDTO>();
+			String user="default";
 			for(int i=0;i<list.size();i++) { 
 				FileItem item = list.get(i);
 				if(item.isFormField()) {
 					//받은 내용중 파일이 아닌경우
+					if(item.getFieldName().equals("user")) {
+						user = item.getString(encoding);
+					}
 					System.out.println(item.getFieldName() + " : " + item.getString(encoding));
 				}
 				else {
@@ -69,21 +72,26 @@ public class FileUploadServlet extends HttpServlet {
 							idx = item.getName().lastIndexOf("/");
 						}
 						String fileName = item.getName().substring(idx+1);
-						File uploadFile = new File(filePath +"\\"+fileName);
+						//파일 경로 완성
+						File uploadFile = new File(userPath.getAbsolutePath() +"\\"+user+"\\"+fileName);
+						if(!uploadFile.getParentFile().exists()) {
+							uploadFile.getParentFile().mkdirs();
+						}
 						System.out.println("셋팅된 전체 경로 : "+uploadFile);
 						item.write(uploadFile);
-						request.setAttribute("file"+i, request.getContextPath() + "/upload/" + fileName);
-						request.setAttribute("fileName"+i, fileName);
-						request.setAttribute("item"+i, item);
-						request.setAttribute("uploadFile"+i, uploadFile);
 						
-						String root = request.getSession().getServletContext().getRealPath("/") + "/upload/";
-						String name = fileName;
-						FileDTO dto = new FileDTO(new File(root + "\\" + name));
-						request.setAttribute("dto"+i, dto);
+						req_list.add(new FileDTO(uploadFile));
+						
+						/*
+						 * request.setAttribute("file"+i, request.getContextPath() + "/upload/" +
+						 * fileName); request.setAttribute("fileName"+i, fileName);
+						 * request.setAttribute("item"+i, item); request.setAttribute("dto"+i, dto);
+						 */
 					}
 				}
 			}
+			request.setAttribute("user", user);
+			request.setAttribute("list", req_list);
 		} catch (FileUploadException e) {
 			e.printStackTrace();
 		} catch (Exception e) {

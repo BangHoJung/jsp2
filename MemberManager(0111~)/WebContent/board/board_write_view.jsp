@@ -7,7 +7,27 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function () {
+		var index = 1;
+		$(document).on("click","#plus", function() {
+			if(index == 5) return;
+			index++;
+			//$("table").append("<tr><th></th><td><input type='file' name='file"+index+"'></td></tr>");
+			$(this).parent().parent().parent().children("tr").last().siblings().last().after("<tr><th></th><td><input type='file' name='file"+index+"'></td></tr>");
+			
+		});
+		
+		$(document).on("click","#minus", function() {
+			if(index == 1) return;
+			//$(this).parent().parent().parent().children("tr").last().remove();
+			$(this).parent().parent().parent().children("tr").last().siblings().last().remove();
+			index--;
+			
+		});
+	});
+</script>
 <style type="text/css">
 	* {
 		margin:0;
@@ -19,7 +39,6 @@
 	}
 	
 	nav {
-		height: 600px;
 	}
 	
 	nav table{
@@ -36,6 +55,9 @@
 		width: 500px;
 		padding:5px;
 		height: 40px;
+	}
+	nav td a {
+		margin-right:20%;
 	}
 	nav input{
 		width: 100%;
@@ -69,6 +91,18 @@
 		height: 300px;
 		resize: none;
 		box-sizing: border-box;
+	}
+	
+	
+	#plus,#minus {
+		width:30px;
+		height: 30px;
+		margin-left:10px;
+	}
+	
+	input[type=file] {
+		padding-top:5px;
+		float:right;
 	}
 	
 </style>
@@ -112,7 +146,7 @@
 		
 		<nav>
 			<h2>글쓰기 페이지</h2>
-		<form action="insert_board.do" method="post">
+		<form action="insert_board.do" enctype="multipart/form-data" method="post">
 			<table>
 				<tr>
 					<th>제목</th>
@@ -129,13 +163,23 @@
 					<th style="vertical-align: top;">내용</th><td><textarea name="content"></textarea></td>
 				</tr>
 				<tr>
-					<th><a href="${sessionScope.lastBoard}" class="btn">목록보기</a></th>
-					<td style="text-align: right;">
+					<th><button id="plus" type="button">+</button><button id="minus" type="button">-</button></th>
+					<td><input type="file" name="file1"></td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
 						<a href="javascript:history.back();" class="btn">뒤로가기</a>
+						<a href="${sessionScope.lastBoard}" class="btn">목록보기</a>
 						<button class="btn" type="submit">글쓰기</button>
 					</td>
 				</tr>
 			</table>
+			<%-- <div>
+				<a href="${sessionScope.lastBoard}" class="btn">목록보기</a>
+				<a href="javascript:history.back();" class="btn">뒤로가기</a>
+				<button class="btn" type="submit">글쓰기</button>
+			</div> --%>
 		</form>
 		</nav>
 		

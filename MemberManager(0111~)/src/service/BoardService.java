@@ -6,6 +6,7 @@ import java.util.HashMap;
 import dao.BoardDAO;
 import dto.BoardDTO;
 import dto.CommentDTO;
+import dto.FileDTO;
 import dto.QnaDTO;
 import exception.BoardException;
 
@@ -98,6 +99,11 @@ public class BoardService {
 			count = dao.updateQnaStatus(qid, status);
 		}
 		return count;
+	}
+
+	public void insertFileList(ArrayList<FileDTO> fList) {
+		// TODO Auto-generated method stub
+		dao.insertFileList(fList);
 	}
 
 

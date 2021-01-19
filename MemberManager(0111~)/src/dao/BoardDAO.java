@@ -9,6 +9,7 @@ import java.util.HashMap;
 import config.DBManager;
 import dto.BoardDTO;
 import dto.CommentDTO;
+import dto.FileDTO;
 import dto.QnaDTO;
 import exception.BoardException;
 import vo.PagingVO;
@@ -443,5 +444,30 @@ public class BoardDAO {
 		}
 		
 		return count;
+	}
+
+	public void insertFileList(ArrayList<FileDTO> fList) {
+		
+		PreparedStatement pstmt = null;
+		String sql = "INSERT INTO board_file_list VALUES(?,?,?)";
+		
+		try {
+			for(int i=0;i<fList.size();i++) {
+				pstmt = manager.getConn().prepareStatement(sql);
+				pstmt.setInt(1, fList.get(i).getBno());
+				pstmt.setString(2, fList.get(i).getWriter());
+				pstmt.setString(3, fList.get(i).getPath());
+				
+				pstmt.executeUpdate();
+				pstmt.close();
+			}
+			manager.getConn().commit();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			manager.close(pstmt, null);
+		}
+		System.out.println("fList size :" + fList.size());
+		
 	}
 }

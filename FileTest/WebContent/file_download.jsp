@@ -7,10 +7,12 @@
 
 <%
 	//다운로드 할 파일명
-	String fileName = request.getParameter("file");
+	String fileName = request.getParameter("fileName");
+	String user = request.getParameter("user");
 	//다운로드할 파일 전체 경로
-	String path = application.getRealPath("/upload") + File.separator + fileName;
+	String path = "C:\\fileupload\\"+user+"\\"+fileName;
 	System.out.println("다운로드할 파일 전체 경로 : "+path);
+	
 	File file = new File(path);
 	FileInputStream fis = new FileInputStream(file);
 	

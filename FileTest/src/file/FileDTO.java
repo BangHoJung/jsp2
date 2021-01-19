@@ -6,9 +6,10 @@ public class FileDTO {
 	private String path;
 	private String fileName;
 	private String type;
+	
 	public FileDTO(File file) {
 		super();
-		this.path = "upload/"+file.getName();
+		this.path = file.getAbsolutePath();
 		this.fileName = file.getName();
 		switch(fileName.substring(fileName.lastIndexOf(".")+1)) {
 		case "png":
@@ -21,7 +22,7 @@ public class FileDTO {
 			type = "normal";
 		}
 	}
-	
+
 	public String getPath() {
 		return path;
 	}

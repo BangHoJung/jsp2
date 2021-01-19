@@ -50,7 +50,7 @@ public class FileUploadServlet extends HttpServlet {
 		
 		try {
 			List<FileItem> list = upload.parseRequest(request); 
-			for(int i=0;i<list.size();i++) {
+			for(int i=0;i<list.size();i++) { 
 				FileItem item = list.get(i);
 				if(item.isFormField()) {
 					//받은 내용중 파일이 아닌경우
@@ -74,6 +74,8 @@ public class FileUploadServlet extends HttpServlet {
 						item.write(uploadFile);
 						request.setAttribute("file"+i, request.getContextPath() + "/upload/" + fileName);
 						request.setAttribute("fileName"+i, fileName);
+						request.setAttribute("item"+i, item);
+						request.setAttribute("uploadFile"+i, uploadFile);
 					}
 				}
 			}

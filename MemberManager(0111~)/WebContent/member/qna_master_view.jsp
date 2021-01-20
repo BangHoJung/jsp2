@@ -50,21 +50,6 @@
 </style>
 </head>
 <body>
-	<c:if test="${sessionScope.login == null or sessionScope.login == false }">
-		<script>
-			alert("로그인이 필요합니다");
-			location.href="${sessionScope.last}";
-		</script>
-	</c:if>
-	<c:choose>
-		<c:when test="${pageContext.request.queryString != null }">
-			<c:set var="last" value="${pageContext.request.requestURI}?${pageContext.request.queryString }" scope="session" />
-		</c:when>
-		<c:otherwise>
-			<c:set var="last" value="${pageContext.request.requestURI}" scope="session" />
-		</c:otherwise>
-	</c:choose>
-	<c:out value="last:${last}"/>
 	
 	<%-- <%
 		String param = "";

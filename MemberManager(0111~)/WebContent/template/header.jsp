@@ -43,7 +43,7 @@
 
 	<header>
 		<ul>
-			<li><a href="index.jsp">HOME</a></li>
+			<li><a href="<%=request.getContextPath() %>/index.jsp">HOME</a></li>
 			<%
 				boolean flag = false;
 				if(session.getAttribute("login") != null)  {

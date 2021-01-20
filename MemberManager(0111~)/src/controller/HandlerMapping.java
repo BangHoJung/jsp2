@@ -1,7 +1,12 @@
 package controller;
 
 import controller_board.BoardViewController;
+import controller_board.DeleteBoardController;
 import controller_board.InsertBoardController;
+import controller_board.InsertCommentController;
+import controller_board.UpdateBoardViewController;
+import controller_board.UpdateCommentLikeHateController;
+import controller_board.UpdateLikeHateController;
 import controller_board.WriteBoardViewController;
 import controller_member.InsertMemberController;
 import controller_member.LoginController;
@@ -70,8 +75,26 @@ public class HandlerMapping {
 		case "insert_board.do":
 			controller = new InsertBoardController();
 			break;
+		case "delete_board.do":
+			controller = new DeleteBoardController();
+			break;
+		case "update_board_view.do":
+			controller = new UpdateBoardViewController();
+			break;
 		case "board_view.do":
 			controller = new BoardViewController();
+			break;
+		case "update_like_hate.do":
+			controller = new UpdateLikeHateController();
+			break;
+		case "update_comment_like_hate.do":
+			controller = new UpdateCommentLikeHateController();
+			break;
+		case "image_load.do":
+			controller = new ImageLoadController();
+			break;
+		case "insert_comment.do":
+			controller = new InsertCommentController();
 			break;
 		}
 		return controller;

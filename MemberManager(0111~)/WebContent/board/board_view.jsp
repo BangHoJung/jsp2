@@ -20,15 +20,15 @@
 			if(session.getAttribute("login") == null || (boolean) session.getAttribute("login")==false){
 				%>
 				alert("로그인이 필요합니다.");
-				location.href="<%=request.getContextPath()%>/member/login.jsp";
+				<%-- location.href="<%=request.getContextPath()%>/member/login.jsp"; --%>
 				<%
 			}
 			else {
 			%>
-				var data = "bno=<%=request.getParameter("bno")%>&id=" + $(this).attr("id");
+				var data = "bno=${param.bno}&lh=" + $(this).attr("id");
 				var obj = $(this);
 				$.ajax({
-					url : "process/board_like_hate_process.jsp",
+					url : "update_like_hate.do",
 					data : data,
 					method : 'get',
 					success : function(d) {
@@ -49,6 +49,25 @@
 			%>
 		});
 		
+		$(".like_hate").click(function() {
+			if(${sessionScope.login == null or sessionScope.login == false}) {
+				alert("로그인이 필요합니다");
+			}
+			else {
+				var data = $("#comment_form").serialize() + "&lh="+$(this).attr("id");
+				var obj = $(this);
+				$.ajax({
+					url:'update_comment_like_hate.do',
+					data : data,
+					mehtod: 'get',
+					success : function(d) {
+						d = d.trim();
+						$(obj).children("span").html(d);
+					}
+				});
+			}
+		});
+		
 		$("textarea").keyup(function() {
 			$(".length").html( $(this).val().length+"/500");
 		});
@@ -58,15 +77,15 @@
 			var data = $("#comment").serialize();
 			console.log(data);
 			$.ajax({
-				url:'process/comment_insert_process.jsp',
+				url:'insert_comment.do',
 				data:data,
 				method:'get',
 				success: function(d) {
-					alert("댓글 등록 성공 : " + d);
 					location.reload();
 				}
 			});
 		});
+		
 	});
 </script>
 <style type="text/css">
@@ -298,41 +317,15 @@
 		margin-top:5px;
 	}
 	
+	#file_view img{
+		width:50px;
+		height: 50px;
+	}
+	
 	
 </style>
 </head>
 <body>
-	<%-- <%
-		
-		BoardDTO dto = null;
-		int bno = 0;
-		
-		bno = Integer.parseInt(request.getParameter("bno"));
-		dto =  BoardService.getInstance().searchBoardDTO(bno);
-		ArrayList<CommentDTO> comment_list = BoardService.getInstance().searchAllCommentDTO(bno);
-		for(int i=0;i<comment_list.size();i++) {
-			System.out.println(comment_list.get(i));
-		}
-
-		//application.setAttribute("last", request.getRequestURI()+"?bno="+request.getParameter("bno"));
-		String param = "";
-		if(request.getQueryString()!=null) {
-			param += "?"+request.getQueryString();
-		}
-		session.setAttribute("last", request.getRequestURI()+param);
-		
-	%> --%>
-	
-	<c:choose>
-		<c:when test="${pageContext.request.queryString != null }">
-			<c:set var="last" value="${pageContext.request.requestURI}?${pageContext.request.queryString }" scope="session" />
-		</c:when>
-		<c:otherwise>
-			<c:set var="last" value="${pageContext.request.requestURI}" scope="session" />
-		</c:otherwise>
-	</c:choose>
-	<c:out value="last:${last}"/>
-	
 	<div id="container">
 		<jsp:include page="/template/header.jsp" flush="false"></jsp:include>
 		
@@ -340,34 +333,18 @@
 			<h2>작성글 조회</h2>
 			<form action="/process/board_write_process" method="post">
 				<table>
-					<c:if test="${sessionScope.login == null or sessionScope.login == false }">
+					<c:if test="${sessionScope.login != null and sessionScope.login == true }">
 						<c:if test="${requestScope.dto.writer eq sessionScope.id }">
 							<tr>
 								<th></th>
 								<td>
-									<a href="#" id="update" class="btn">수정</a>
-									<a href="#" id="delete" class="btn">삭제</a>
+									<a href="update_board_view.do?bno=${param.bno}&writer=${requestScope.dto.writer}" id="update" class="btn">수정</a>
+									<a href="delete_board.do?bno=${param.bno}&writer=${requestScope.dto.writer}" id="delete" class="btn">삭제</a>
 								</td>
 								
 							</tr>
 						</c:if>
 					</c:if>
-					<%-- <%
-						if(session.getAttribute("login")!=null && (boolean)session.getAttribute("login")) {
-							if(dto.getWriter().equals(session.getAttribute("id"))) {
-					%>
-					<tr>
-						<th></th>
-						<td>
-							<a href="#" id="update" class="btn">수정</a>
-							<a href="#" id="delete" class="btn">삭제</a>
-						</td>
-						
-					</tr>
-					<%
-							}
-						}
-					%> --%>
 					<tr>
 						<th>작성일</th>
 						<td>${requestScope.dto.date}</td>
@@ -399,18 +376,15 @@
 						<th>
 						</th>
 						<td>
-							<a href="#" id="like" class="btn_like_hate">
+							<a href="#none" id="like" class="btn_like_hate">
 								<img src="${pageContext.request.contextPath}/img/like.png"> 
 								 <span>${requestScope.dto.like}</span>
 							</a> 
-							<a href="#" id="hate" class="btn_like_hate">
+							<a href="#none" id="hate" class="btn_like_hate">
 								<img src="${pageContext.request.contextPath}/img/hate.png"> 
 								<span>${requestScope.dto.hate}</span>
 							</a> 
 						</td>
-					</tr>
-					<tr>
-						<td colspan="2"><hr></td>
 					</tr>
 					<tr>
 						<th>
@@ -423,10 +397,28 @@
 					</tr>
 				</table>
 			</form>
+			<hr>
+			<div id="file_view">
+				<c:if test="${requestScope.file_list.size() > 0 }">첨부파일<br></c:if>
+				<c:forEach var="file" items="${requestScope.file_list }">
+					<p>
+						<a href="file_download.jsp?writer=${file.writer}&fileName=${file.fileName}">${file.writer} / ${file.fileName}</a>
+						<c:if test="${file.type eq 'image' }">
+							<button>이미지보기</button>
+							<div>
+								<img src="image_load.do?writer=${file.writer}&fileName=${file.fileName}" >
+							</div>
+							<%-- <img src="file_download.jsp?writer=${file.writer}&fileName=${file.fileName}" > --%>
+						</c:if>
+					</p>
+				</c:forEach>
+			</div>
+			<hr>
+			<br>
 			<c:if test="${sessionScope.login != null and sessionScope.login == true }">
 				<div id="comment_write">
 					<form id="comment">
-						<input type="hidden" name="bno" value="${requestScope.dto.bno}">
+						<input type="hidden" name="bno" value="${param.bno}">
 						<input type="hidden" name="writer" value="${sessionScope.id }">
 						<span>${sessionScope.id }</span><br><hr>
 						<textarea placeholder="댓글을 입력하세요" maxlength="500" name="content"></textarea>
@@ -439,18 +431,21 @@
 			
 				<c:forEach var="list" items="${requestScope.comment_list }">
 					<div>
-					<h3>${list.writer}</h3>
-					<p>${list.date}</p>
-					<p>${list.content}</p>
-					<c:if test="${sessionScope.login != null and sessionScope.login == true }">
-						<c:if test="${list.writer == sessionScope.id}">
-							<a href="#">수정</a> / <a href="#">삭제</a>
-						</c:if>
-						
-					</c:if>
-					<a href="#" class="like_hate"><img src="${pageContext.request.contextPath}/img/hate.png"><span>${list.hate}</span></a>
-					<a href="#" class="like_hate"><img src="${pageContext.request.contextPath}/img/like.png"><span>${list.like}</span></a>
-				</div>
+						<form id="comment_form">
+							<input type="hidden" name="cno" value="${list.cno }">
+							<h3>${list.writer}</h3>
+							<p>${list.date}</p>
+							<p>${list.content}</p>
+							<c:if test="${sessionScope.login != null and sessionScope.login == true }">
+								<c:if test="${list.writer == sessionScope.id}">
+									<a href="#">수정</a> / <a href="#">삭제</a>
+								</c:if>
+								
+							</c:if>
+							<a href="#none" class="like_hate" id="chate"><img src="${pageContext.request.contextPath}/img/hate.png"><span>${list.hate}</span></a>
+							<a href="#none" class="like_hate" id="clike"><img src="${pageContext.request.contextPath}/img/like.png"><span>${list.like}</span></a>
+						</form>
+					</div>
 				</c:forEach>
 			</div>
 		</nav>

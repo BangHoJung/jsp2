@@ -27,8 +27,11 @@ public class InsertBoardController implements Controller {
 		String title = null;
 		String writer = null;
 		String content = null;
-		
+		//절대 경로
 		String path="C:\\fileupload";
+		//상대 경로
+//		String path=request.getSession().getServletContext().getRealPath("\\upload");
+		
 		DiskFileItemFactory factory = new DiskFileItemFactory();
 		factory.setRepository(new File(path)); // 업로드될 폴더
 		factory.setSizeThreshold(1024 * 1024); // 1MB
@@ -67,13 +70,17 @@ public class InsertBoardController implements Controller {
 						}
 						String fileName = item.getName().substring(idx+1);
 						//파일 경로 완성
+						//절대경로
 						File pathFile = new File(path +"\\"+writer+"\\"+fileName);
+						//상대경로
+//						File pathFile = new File(request.getContextPath()+"/Webcontent/upload/"+fileName);
+						System.out.println(pathFile.getAbsolutePath());
 						if(!pathFile.getParentFile().exists()) {
 							pathFile.getParentFile().mkdirs();
 						}
 						item.write(pathFile);
 						System.out.println("셋팅된 전체 경로 : "+pathFile);
-						fList.add(new FileDTO(0,writer,pathFile.getName()));
+						fList.add(new FileDTO(0,writer,pathFile));
 						
 						/*
 						 * request.setAttribute("file"+i, request.getContextPath() + "/upload/" +

@@ -467,7 +467,98 @@ public class BoardDAO {
 		} finally {
 			manager.close(pstmt, null);
 		}
-		System.out.println("fList size :" + fList.size());
 		
+	}
+
+	public ArrayList<FileDTO> searchFileList(int bno,String writer) {
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		ArrayList<FileDTO> list = new ArrayList<FileDTO>();
+		String sql="SELECT * FROM board_file_list WHERE bno=? AND writer =?";
+		
+		try {
+			pstmt = manager.getConn().prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			pstmt.setString(2, writer);
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				list.add(new FileDTO(rs.getInt(1),rs.getString(2) ,rs.getString(3)));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			manager.close(pstmt, rs);
+		}
+		
+		return list;
+	}
+
+	public int addLikeHateCommentDTO(int cno, String lh) {
+		PreparedStatement pstmt2 = null;
+		ResultSet rs = null;
+		lh = lh.trim();
+		int result = 0;
+		String sql2 = "SELECT "+lh+" FROM board_comment WHERE cno = ?";
+		
+		try {
+			pstmt2 = manager.getConn().prepareStatement(sql2);
+			//pstmt2.setString(1, lh);
+			pstmt2.setInt(1, cno);
+			
+			rs = pstmt2.executeQuery();
+			
+			if(rs.next()) {
+				result = rs.getInt(1);
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			manager.close(pstmt2, rs);
+		}
+		
+		result = result + 1;
+
+		PreparedStatement pstmt = null;
+		String sql = "UPDATE BOARD_COMMENT SET "+ lh +" = ? WHERE cno = ?";
+		
+		try {
+			pstmt = manager.getConn().prepareStatement(sql);
+			//pstmt.setString(1, lh);
+			pstmt.setInt(1, result);
+			pstmt.setInt(2, cno);
+			
+			int count = pstmt.executeUpdate();
+			if(count==0) {
+				System.out.println("업데이트 실패");
+			}
+			System.out.println("DAO : 게시글 호감도 업데이트");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			manager.close(pstmt, null);
+		}
+		return result;
+	}
+
+	public int deleteBoardDTO(int bno) {
+		PreparedStatement pstmt = null;
+		String sql ="DELETE FROM board WHERE bno=?";
+		int count=0;
+		
+		try {
+			pstmt = manager.getConn().prepareStatement(sql);
+			pstmt.setInt(1, bno);
+			count = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			manager.close(pstmt, null);
+		}
+		
+		return count;
 	}
 }

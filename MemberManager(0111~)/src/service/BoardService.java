@@ -106,5 +106,17 @@ public class BoardService {
 		dao.insertFileList(fList);
 	}
 
+	public ArrayList<FileDTO> searchFileList(int bno,String writer) {
+		return dao.searchFileList(bno,writer);
+	}
+
+	public int addLikeHateCommentDTO(int cno, String lh) {
+		return dao.addLikeHateCommentDTO(cno,lh);
+	}
+
+	public int deleteBoardDTO(int bno) {
+		return dao.deleteBoardDTO(bno);
+	}
+
 
 }

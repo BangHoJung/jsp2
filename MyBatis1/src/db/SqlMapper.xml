@@ -9,10 +9,30 @@
   	<select id="selectAllEmployee" resultType="dto.EmployeeDTO">
 		SELECT * FROM employee  		
   	</select>
+  	<select id="selectEmployee" parameterType="String" resultType="dto.EmployeeDTO">
+  		<![CDATA[SELECT * FROM employee WHERE eno = #{eno}]]>
+  	</select>
+  	<select id="selectEmployeeName" parameterType="String" resultType="dto.EmployeeDTO">
+  		<![CDATA[ SELECT * FROM employee WHERE name LIKE #{name} ]]>
+  	</select>
   	<select id="selectEmployee_positionUnder" resultType="dto.EmployeeDTO" parameterType="int">
   		<![CDATA[SELECT * FROM employee WHERE position < #{no}]]>
   	</select>
   	<select id="selectEmployee_positionArea" resultType="dto.EmployeeDTO" parameterType="Map">
-  		<![CDATA[SELECT * FROM employee WHERE position >= #{start} AND position < #{end}]]>
+  		<![CDATA[SELECT * FROM employee WHERE position BETWEEN #{start} AND #{end}]]>
   	</select>
+  	
+  	
+  	<insert id="insertEmployee" parameterType="dto.EmployeeDTO" >
+  		<![CDATA[ INSERT INTO employee VALUES(#{eno},#{name},#{department},#{position})]]>
+  	</insert>
+  	
+  	
+  	<update id="updateEmployee" parameterType="dto.EmployeeDTO">
+  		<![CDATA[ UPDATE employee SET name=#{name}, department=#{department}, position=#{position} WHERE eno = #{eno} ]]>
+  	</update>
+  	
+  	<delete id="deleteEmployeePosition" parameterType="int">
+  		<![CDATA[ DELETE FROM employee WHERE position = #{position} ]]>
+  	</delete>
 </mapper>

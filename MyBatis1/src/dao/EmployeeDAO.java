@@ -23,7 +23,7 @@ public class EmployeeDAO {
 		try {
 			inputStream = Resources.getResourceAsStream(resource);
 			factory = new SqlSessionFactoryBuilder().build(inputStream);
-			session = factory.openSession();
+			session = factory.openSession(true);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -46,6 +46,14 @@ public class EmployeeDAO {
 		return list;
 	}
 	
+	public EmployeeDTO searchEmployee(String eno) throws Exception {
+		EmployeeDTO dto =  session.selectOne("db.SqlMapper.selectEmployee",eno);
+		if(dto == null) {
+			throw new Exception("NULL");
+		}
+		return dto;
+	}
+	
 	public List<EmployeeDTO> searchEmployee_positionUnder(int no) {
 		List<EmployeeDTO> list = session.selectList("db.SqlMapper.selectEmployee_positionUnder",no);
 		return list;
@@ -56,5 +64,23 @@ public class EmployeeDAO {
 		map.put("start", start);
 		map.put("end", end);
 		return session.selectList("db.SqlMapper.selectEmployee_positionArea",map );
+	}
+
+	public void insertEmployee(String eno, String name, String department, int position) throws Exception {
+		EmployeeDTO dto = new EmployeeDTO(eno, name, department, position);
+		session.insert("db.SqlMapper.insertEmployee", dto);
+
+	}
+
+	public void updateEmployee(String eno, String name, String department, int position) throws Exception{
+		session.update("db.SqlMapper.updateEmployee", new EmployeeDTO(eno, name, department, position));
+	}
+
+	public List<EmployeeDTO> searchEmployeeName(String name) {
+		return session.selectList("db.SqlMapper.selectEmployeeName",name);
+	}
+
+	public void deleteEmployeePosition(int position) {
+		session.delete("db.SqlMapper.deleteEmployeePosition", position);
 	}
 }

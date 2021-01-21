@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="db.BoardMapper">
+	<!-- BOARD -->
+  	<insert id="insertBoardDTO" parameterType="dto.BoardDTO">
+  		INSERT INTO board(bno,title,writer,content) VALUES (SEQ_BNO.NEXTVAL,#{title},#{writer},#{content})
+  	</insert>
+  	
+  	<!-- BOARD -->
+  	<select id="searchBoardDTO" parameterType="int" resultType="dto.BoardDTO">
+  		SELECT * FROM board WHERE bno = #{bno}
+  	</select>
+  	<select id="searchLikeBoard" parameterType="int" resultType="int">
+  		SELECT blike FROM board WHERE bno = #{bno}
+  	</select>
+  	<select id="searchHateBoard" parameterType="int" resultType="int">
+  		SELECT bhate FROM board WHERE bno = #{bno}
+  	</select>
+  	<select id="searchAllBoardDTO" parameterType="Map" resultType="dto.BoardDTO">
+  		SELECT * FROM  (SELECT rs.*,ROWNUM rn FROM (SELECT * FROM BOARD  ORDER BY ${sort} desc) rs) WHERE CEIL(rn/#{page}) = #{currPage}
+  	</select>
+  	<select id="countAllBoard">
+  		SELECT COUNT(*) FROM board;
+  	</select>
+  	
+  	<!-- BOARD -->
+  	<update id="addBoardCount" parameterType="int">
+  		UPDATE board SET bcount = bcount + 1 WHERE bno = #{bno}
+  	</update>
+  	<update id="updateLikeBoard" parameterType="Map">
+  		UPDATE board SET blike = #{result} WHERE bno = #{bno}
+  	</update>
+  	<update id="updateHateBoard" parameterType="Map">
+  		UPDATE board SET bhate = #{result} WHERE bno = #{bno}
+  	</update>
+  	
+  	
+</mapper>

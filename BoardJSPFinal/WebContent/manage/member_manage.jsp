@@ -13,8 +13,6 @@
 <script type="text/javascript">
 
 	$(document).on("click",".update",function() {
-		//e.preventDefault();
-		//console.log("아아");
 		var data="";
 		$.each($(this).parent().siblings().children() , function(i,o) {
 			console.log(i,$(o).val());
@@ -22,7 +20,7 @@
 		});
 		console.log(data);
 		$.ajax({
-			url:"process/ajax_update_member.jsp",
+			url:"manage_update_member.do",
 			data : data,
 			method : 'get',
 			success : function result(data) {
@@ -38,10 +36,10 @@
 	});
 	
 	$(document).on("click",".delete", function() {
-		var data = "id=" + $(this).parent().siblings().children().first().val;
+		var data = "id=" + $(this).parent().siblings().children().first().val();
 		console.log(data);
 		$.ajax({
-			url:"process/ajax_delete_member.jsp",
+			url:"manage_delete_member.do",
 			data : data,
 			method : 'get',
 			success : function result(data) {
@@ -63,7 +61,7 @@
 		$("#btn_submit").click(function(e) {
 			var data = $("#search").serialize();
 			$.ajax({
-				url: "process/ajax_search_member(json).jsp",
+				url: "manage_search_member.do",
 				data : data,
 				method : 'get',
 				success : function result(data) {
@@ -76,27 +74,12 @@
 						result += "<td>"+ json.result[i].id+"<input type='hidden' value = '"+json.result[i].id+"' name='id'></td>";
 						result += "<td><input type='text' value='"+json.result[i].name+"' name='name'></td>";
 						result += "<td><input type='text' value='"+json.result[i].age+"' name='age'></td>";
-						result += "<td><input type='text' value='"+json.result[i].grade_name+"' name='grade_name'></td>";
+						result += "<td><input type='text' value='"+json.result[i].grade+"' name='grade'></td>";
 						result += "<td><a href='#' class='update' >수정</a> / <a href='#' class='delete' >삭제</a></td> </tr>";
 					}
 					result += "</table>";
 					$("#content_area").html(result);
 					
-					// ajax_search_member.jsp 결과 처리
-					/* console.log(data);
-					var result = "<table>";
-					var arr = data.split(",");
-					for(i=0;i<arr.length-1;i++) {
-						var str = arr[i].split(" ");
-						result += "<tr>";
-						result += "<td>"+str[0]+"<input type='hidden' value ='" + str[0] + "' name='id'></td> ";
-						result += "<td><input type='text' value ='" + str[1] + "' name='name'></td> ";
-						result += "<td><input type='text' value ='" + str[2] + "' name='age'></td> ";
-						result += "<td><input type='text' value ='" + str[3] + "' name='grade'></td> ";
-						result += "<td><a href='#' class='update' >수정</a> / <a href='#' class='delete' >삭제</a></td> </tr>";
-					}
-					result += "</table>";
-					$("#content_area").html(result); */
 				}
 				
 			});
@@ -188,24 +171,6 @@
 </head>
 <body>
 	
-	<%
-		if(session.getAttribute("login") == null || !session.getAttribute("grade").equals("master")) {
-			%>
-			<script type="text/javascript">
-				alert("관리자 계정이 아닙니다.");
-				location.href="<%=request.getContextPath()%>/index.jsp";
-			</script>
-			<%
-		}
-	
-		String param = "";
-		if(!request.getQueryString().equals(null)) {
-			param += "?"+request.getQueryString();
-		}
-		session.setAttribute("last", request.getRequestURI()+param);
-	
-	%>
-	
 	<div id="container">
 		<jsp:include page="/template/header.jsp" flush="false"></jsp:include>
 		
@@ -215,7 +180,7 @@
 					<select name="kind">
 						<option value="id" selected>아이디</option>
 						<option value="name">이름</option>
-						<option value="grade_name">등급</option>
+						<option value="grade">등급</option>
 					</select>
 					<input type="text" name="search">
 					<button id="btn_submit" type="button">검색</button>

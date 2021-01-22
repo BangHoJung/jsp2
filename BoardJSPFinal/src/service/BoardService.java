@@ -1,9 +1,9 @@
 package service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.HashMap;
 
-import dao.BoardDAO;
+import dao.BoardDAO_mapper;
 import dto.BoardDTO;
 import dto.CommentDTO;
 import dto.FileDTO;
@@ -14,9 +14,9 @@ public class BoardService {
 
 	private static BoardService instance = new BoardService();
 	
-	private BoardDAO dao = null;
+	private BoardDAO_mapper dao = null;
 	private BoardService() {
-		dao = BoardDAO.getInstance();
+		dao = BoardDAO_mapper.getInstance();
 	}
 	
 	public static BoardService getInstance() {
@@ -49,10 +49,15 @@ public class BoardService {
 	}
 	
 	public int addLikeHateBoardDTO(int bno,String lh) {
-		return dao.addLikeHateBoardDTO(bno,lh);
+		if(lh.equals("like")) {
+			return dao.addLikeBoardDTO(bno);
+		}
+		else {
+			return dao.addHateBoardDTO(bno);
+		}
 	}
 	
-	public ArrayList<BoardDTO> searchAllBoardDTO(int currPage, String sort) {
+	public List<BoardDTO> searchAllBoardDTO(int currPage, String sort) {
 		return dao.searchAllBoardDTO(currPage,sort);
 	}
 	
@@ -60,8 +65,8 @@ public class BoardService {
 		return dao.insertBoardComment(dto);
 	}
 	
-	public ArrayList<CommentDTO> searchAllCommentDTO(int bno) {
-		return dao.searchAllCommentDTO(bno);
+	public  List<CommentDTO> searchAllCommentDTO(int bno) {
+		return  dao.searchAllCommentDTO(bno);
 	}
 	
 	public HashMap<Integer, Integer> countAllComment() {
@@ -72,7 +77,7 @@ public class BoardService {
 		dao.insertQnaDTO(dto);
 	}
 
-	public ArrayList<QnaDTO> searchQnaList(String writer, int currPage, String grade) {
+	public  List<QnaDTO> searchQnaList(String writer, int currPage, String grade) {
 		if(grade.equals("master")) {
 			return dao.searchQnaMasterList(currPage);
 		}
@@ -81,7 +86,7 @@ public class BoardService {
 		}
 	}
 
-	public ArrayList<QnaDTO> searchNoAnswerQnaList() {
+	public  List<QnaDTO> searchNoAnswerQnaList() {
 		return dao.searchNoAnswerQnaList();
 	}
 
@@ -101,17 +106,22 @@ public class BoardService {
 		return count;
 	}
 
-	public void insertFileList(ArrayList<FileDTO> fList) {
+	public void insertFileList( List<FileDTO> fList) {
 		// TODO Auto-generated method stub
 		dao.insertFileList(fList);
 	}
 
-	public ArrayList<FileDTO> searchFileList(int bno,String writer) {
+	public  List<FileDTO> searchFileList(int bno,String writer) {
 		return dao.searchFileList(bno,writer);
 	}
 
 	public int addLikeHateCommentDTO(int cno, String lh) {
-		return dao.addLikeHateCommentDTO(cno,lh);
+		if(lh.equals("clike")) {
+			return dao.addLikeCommentDTO(cno);
+		}
+		else {
+			return dao.addHateCommentDTO(cno);
+		}
 	}
 
 	public int deleteBoardDTO(int bno) {

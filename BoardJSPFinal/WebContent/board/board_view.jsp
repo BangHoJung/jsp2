@@ -392,6 +392,8 @@
 						</th>
 						<td>
 							<a href="${sessionScope.lastBoard}" class="btn" id="list">목록으로</a>
+							<!--다음글 가져오는 쿼리문 -->
+							<!-- SELECT * FROM( SELECT ROWNUM rbrn, rb.* FROM BOARD rb) WHERE rbrn = ( SELECT rn FROM(SELECT ROWNUM rn, b.* FROM BOARD b) WHERE bno=100)+1; -->
 							<a href="#" class="btn" id="next">다음글</a>
 						</td>
 					</tr>

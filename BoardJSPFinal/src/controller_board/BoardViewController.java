@@ -1,6 +1,7 @@
 package controller_board;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,8 +29,8 @@ public class BoardViewController implements Controller {
 		
 		bno = Integer.parseInt(request.getParameter("bno"));
 		dto =  BoardService.getInstance().searchBoardDTO(bno);
-		ArrayList<CommentDTO> comment_list = BoardService.getInstance().searchAllCommentDTO(bno);
-		ArrayList<FileDTO> fList = BoardService.getInstance().searchFileList(dto.getBno(),dto.getWriter());
+		List<CommentDTO> comment_list = BoardService.getInstance().searchAllCommentDTO(bno);
+		List<FileDTO> fList = BoardService.getInstance().searchFileList(dto.getBno(),dto.getWriter());
 		
 		request.setAttribute("dto", dto);
 		request.setAttribute("comment_list", comment_list);

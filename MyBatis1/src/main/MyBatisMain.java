@@ -16,11 +16,11 @@ public class MyBatisMain {
 		//searchAllEmployeeCount(dao);
 		searchAllEmployee(dao);
 		//searchEmplyee_positionUnder(dao);
-		//searchEmployee_positionArea(dao);
+		searchEmployee_positionArea(dao);
 		//insertEmployee(dao,sc);
 		//updateEmployee(dao,sc);
 		//searchEmployeeName(dao,sc);
-		deleteEmployeePosition(dao,sc);
+		//deleteEmployeePosition(dao,sc);
 		
 		
 	}

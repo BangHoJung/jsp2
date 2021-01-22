@@ -19,7 +19,7 @@
   		<![CDATA[SELECT * FROM employee WHERE position < #{no}]]>
   	</select>
   	<select id="selectEmployee_positionArea" resultType="dto.EmployeeDTO" parameterType="Map">
-  		<![CDATA[SELECT * FROM employee WHERE position BETWEEN #{start} AND #{end}]]>
+  		SELECT * FROM employee WHERE position BETWEEN #{start} AND #{end}
   	</select>
   	
   	

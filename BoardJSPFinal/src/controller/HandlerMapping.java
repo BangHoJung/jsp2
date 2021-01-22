@@ -11,6 +11,10 @@ import controller_board.WriteBoardViewController;
 import controller_member.InsertMemberController;
 import controller_member.LoginController;
 import controller_member.LogoutController;
+import controller_member.ManageDeleteMemberController;
+import controller_member.ManageSearchMemberController;
+import controller_member.ManageUpdateMemberController;
+import controller_member.MemberManageController;
 import controller_member.UpdateMemberController;
 import controller_member.UpdateViewController;
 import controller_qna.InsertQnaController;
@@ -95,6 +99,18 @@ public class HandlerMapping {
 			break;
 		case "insert_comment.do":
 			controller = new InsertCommentController();
+			break;
+		case "member_manage.do":
+			controller = new MemberManageController();
+			break;
+		case "manage_search_member.do":
+			controller = new ManageSearchMemberController();
+			break;
+		case "manage_update_member.do":
+			controller = new ManageUpdateMemberController();
+			break;
+		case "manage_delete_member.do":
+			controller = new ManageDeleteMemberController();
 			break;
 		}
 		return controller;

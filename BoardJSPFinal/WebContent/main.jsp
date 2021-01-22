@@ -1,4 +1,4 @@
-<%@page import="dao.BoardDAO"%>
+<%@page import="dao.BoardDAO_mapper"%>
 <%@page import="vo.PagingVO"%>
 <%@page import="java.util.HashMap"%>
 <%@page import="service.BoardService"%>
@@ -6,7 +6,6 @@
 <%@page import="java.util.ArrayList"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page isELIgnored="false" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>

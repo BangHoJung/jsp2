@@ -2,13 +2,17 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="db.BoardMapper">
-	<!-- BOARD -->
+<mapper namespace="mapper.BoardMapper">
   	<insert id="insertBoardDTO" parameterType="dto.BoardDTO">
-  		INSERT INTO board(bno,title,writer,content) VALUES (SEQ_BNO.NEXTVAL,#{title},#{writer},#{content})
+  		INSERT INTO board(bno,title,writer,content) VALUES (#{bno},#{title},#{writer},#{content})
+  	</insert>
+  	<insert id="insertFileList" parameterType="dto.FileDTO">
+  		INSERT INTO board_file_list VALUES(#{bno},#{writer},#{path})
   	</insert>
   	
-  	<!-- BOARD -->
+  	<select id="searchNextBno" resultType="int">
+  		SELECT SEQ_BNO.NEXTVAL FROM DUAL
+  	</select>
   	<select id="searchBoardDTO" parameterType="int" resultType="dto.BoardDTO">
   		SELECT * FROM board WHERE bno = #{bno}
   	</select>
@@ -19,13 +23,23 @@
   		SELECT bhate FROM board WHERE bno = #{bno}
   	</select>
   	<select id="searchAllBoardDTO" parameterType="Map" resultType="dto.BoardDTO">
-  		SELECT * FROM  (SELECT rs.*,ROWNUM rn FROM (SELECT * FROM BOARD  ORDER BY ${sort} desc) rs) WHERE CEIL(rn/#{page}) = #{currPage}
+  		SELECT bs.bno,bs.title,bs.bdate,bs.bcount,bs.writer,bs.content,bs.blike,bs.bhate FROM (SELECT rs.*,ROWNUM rn FROM (SELECT * FROM BOARD  ORDER BY 
+  		<choose>
+  			<when test="sort == 'bno'">bno</when>
+  			<when test="sort == 'bcount'">bcount</when>
+  			<when test="sort == 'blike'">blike</when>
+  			<otherwise>bhate</otherwise>
+  		</choose> 
+  		DESC) rs) bs  WHERE CEIL(rn/#{page}) = #{currPage}
   	</select>
-  	<select id="countAllBoard">
-  		SELECT COUNT(*) FROM board;
+  	<select id="countAllBoard" resultType="int">
+  		SELECT COUNT(*) FROM board
+  	</select>
+  	<select id="searchFileList" parameterType="Map" resultType="dto.FileDTO">
+  		SELECT * FROM board_file_list WHERE bno=#{bno} AND writer = #{writer}
   	</select>
   	
-  	<!-- BOARD -->
+  	
   	<update id="addBoardCount" parameterType="int">
   		UPDATE board SET bcount = bcount + 1 WHERE bno = #{bno}
   	</update>
@@ -35,6 +49,11 @@
   	<update id="updateHateBoard" parameterType="Map">
   		UPDATE board SET bhate = #{result} WHERE bno = #{bno}
   	</update>
+  	
+  	
+  	<delete id="deleteBoardDTO" parameterType="int">
+  		DELETE FROM board WHERE bno=#{bno}
+  	</delete>
   	
   	
 </mapper>

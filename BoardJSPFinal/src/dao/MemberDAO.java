@@ -1,21 +1,37 @@
 package dao;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 
-import config.DBManager;
 import exception.MemberException;
 import vo.MemberVO;
 
 public class MemberDAO {
 	private static MemberDAO instance = new MemberDAO();
-	private DBManager manager = null;
+	private SqlSessionFactory factory;
+	private SqlSession session;
 	
 	private MemberDAO() {
-		manager = DBManager.getInstance();
+		String resource = "/config/mybatis-config.xml";
+		InputStream inputStream;
+		try {
+			inputStream = Resources.getResourceAsStream(resource);
+			factory = new SqlSessionFactoryBuilder().build(inputStream);
+			session = factory.openSession(true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static MemberDAO getIntance() {
@@ -24,196 +40,61 @@ public class MemberDAO {
 	}
 
 	public void insertMemberVO(MemberVO vo) throws MemberException{
-		PreparedStatement pstmt = null;
-		String sql = "INSERT INTO MEMBER VALUES(?,?,?,?,1)";
 		
-		try {
-			pstmt = manager.getConn().prepareStatement(sql);
-			pstmt.setString(1, vo.getId());
-			pstmt.setString(2, vo.getPass());
-			pstmt.setString(3, vo.getName());
-			pstmt.setInt(4, vo.getAge());
+		int count = session.insert("mapper.MemberMapper.insertMemberVO",vo);
+		if(count == 0) throw new MemberException("멤버 등록 실패");
 			
-			int count = pstmt.executeUpdate();
-			
-			if(count == 0) {
-				throw new MemberException("멤버 등록 실패");
-			}
-			System.out.println("DAO : 멤버 등록 성공");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			manager.close(pstmt, null);
-		}
-		
 	}
 	
 	public MemberVO searchMemberVO(String id) {
-		
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		MemberVO vo = null;
-		String sql = "SELECT id,pass,name,age,grade_name FROM member,grade_list WHERE id =? AND member.grade=grade_list.grade ";
-		
-		try {
-			pstmt = manager.getConn().prepareStatement(sql);
-			pstmt.setString(1, id);
-			
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				vo = new MemberVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4),rs.getString(5));
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			manager.close(pstmt, rs);
-		}
-		
-		return vo;
+		return session.selectOne("mapper.MemberMapper.searchMemberVO",id);
 	}
 
 	public void updatePass(String id, String pass) throws MemberException {
-		PreparedStatement pstmt = null;
-		String sql = "update  member set pass = ? where id = ?";
-		try {
-			pstmt = manager.getConn().prepareStatement(sql);
-			pstmt.setString(1, pass);
-			pstmt.setString(2,id);
-			int count = pstmt.executeUpdate();
-			if(count == 0) {
-				throw new MemberException("암호수정에 실패했습니다.");
-			}
-			System.out.println("DAO : 암호 수정 성공");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			manager.close(pstmt, null);
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", id);
+		map.put("pass", pass);
+		int count = session.update("mapper.MemberMapper.updatePass",map);
+		if(count == 0) {
+			throw new MemberException("암호수정에 실패했습니다.");
 		}
 		
 	}
 
 	public MemberVO searchMemberVO(String id, String pass) {
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		MemberVO vo = null;
-		String sql = "SELECT id,pass,name,age,grade_name FROM member,grade_list WHERE id=? AND pass=? AND member.grade = grade_list.grade";
-		
-		try {
-			pstmt = manager.getConn().prepareStatement(sql);
-			pstmt.setString(1, id);
-			pstmt.setString(2, pass);
-			rs = pstmt.executeQuery();
-			
-			if(rs.next()) {
-				vo = new MemberVO(rs.getString(1), null, rs.getString(3), rs.getInt(4), rs.getString(5));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			manager.close(pstmt, rs);
-		}
-		
-		return vo;
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("id", id);
+		map.put("pass", pass);
+		return session.selectOne("mapper.MemberMapper.searchMemberVOPass",map);
 	}
 
 	public void updateMemberVO(MemberVO vo) throws MemberException {
-
-		PreparedStatement pstmt = null;
-		if(vo.getGrade() == null) {
-			String sql = "UPDATE MEMBER SET pass = ?, name = ?, age = ? WHERE id = ?";
 			
-			try {
-				pstmt = manager.getConn().prepareStatement(sql);
-				pstmt.setString(1, vo.getPass());
-				pstmt.setString(2, vo.getName());
-				pstmt.setInt(3, vo.getAge());
-				pstmt.setString(4, vo.getId());
-				
-				int count = pstmt.executeUpdate();
-				if(count == 0) {
-					throw new MemberException("멤버 정보 변경에 실패했습니다.");
-				}
-				
-				System.out.println("DAO : 정보 변경 성공");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				manager.close(pstmt, null);
-			}
+		int count = session.update("mapper.MemberMapper.updateMemberVO",vo);
+		if(count == 0) {
+			throw new MemberException("멤버 정보 변경에 실패했습니다.");
 		}
-		
-		else if(vo.getPass() == null) {
-			String sql = "UPDATE MEMBER SET name = ?, age = ?, grade = (SELECT grade FROM grade_list WHERE grade_name = ?) WHERE id = ?";
-			
-			try {
-				pstmt = manager.getConn().prepareStatement(sql);
-				pstmt.setString(1, vo.getName());
-				pstmt.setInt(2, vo.getAge());
-				pstmt.setString(3, vo.getGrade());
-				pstmt.setString(4, vo.getId());
-				
-				int count = pstmt.executeUpdate();
-				if(count == 0) {
-					throw new MemberException("멤버 정보 변경에 실패했습니다.");
-				}
-				
-				System.out.println("DAO : 정보 변경 성공");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			} finally {
-				manager.close(pstmt, null);
-			}
-		}
-		
 	}
 	
 	
 	
-	public ArrayList<MemberVO> searchAllMemberVO(String name) {
-		ArrayList<MemberVO> list = new ArrayList<MemberVO>();
-		PreparedStatement pstmt = null;
-		ResultSet rs = null;
-		name = "%"+name+"%";
-		String sql = "SELECT id,pass,name,age,grade_name FROM MEMBER,GRADE_LIST WHERE member.grade = grade_list.grade AND name Like ?";
-		
-		try {
-			pstmt = manager.getConn().prepareStatement(sql);
-			pstmt.setString(1, name);
-			rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				list.add(new MemberVO(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5)));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			manager.close(pstmt, rs);
-		}
-		
-		return list;
+	public List<MemberVO> searchAllMemberVO(String name) {
+		return session.selectList("mapper.MemberMapper.searchAllMemberVO",name);
 		
 	}
 
 	public void deleteMemberVO(String id) throws MemberException {
-
-		PreparedStatement pstmt = null;
-		String sql = "DELETE FROM MEMBER WHERE id=?";
-		
-		try {
-			pstmt = manager.getConn().prepareStatement(sql);
-			pstmt.setString(1, id);
-			
-			int count = pstmt.executeUpdate();
-			if(count == 0) {
-				throw new MemberException("삭제된 데이터가 없습니다.");
-			}
-			System.out.println("DAO : 멤버 삭제 성공");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			manager.close(pstmt, null);
+		System.out.println("manageDeleteDAO");
+		int count = session.delete("mapper.MemberMapper.deleteMemberVO",id);
+		if(count == 0) {
+			throw new MemberException("삭제된 데이터가 없습니다.");
 		}
+	}
+
+	public List<MemberVO> manageSearchMember(String kind, String search) {
+		HashMap<String, String> map = new HashMap<String, String>();
+		map.put("kind", kind);
+		map.put("search", search);
+		return session.selectList("mapper.MemberMapper.manageSearchMember",map);
 	}
 }

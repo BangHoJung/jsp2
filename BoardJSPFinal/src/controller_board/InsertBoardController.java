@@ -93,7 +93,6 @@ public class InsertBoardController implements Controller {
 		} catch (FileUploadException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -101,6 +100,8 @@ public class InsertBoardController implements Controller {
 		int bno = 0;
 		try {
 			bno = BoardService.getInstance().insertBoardDTO(board);
+			System.out.println("file bno :"+bno);
+			if(bno == 0) throw new BoardException("BNO 생성 에러");
 			if(fList.size()>0) {
 				for(int i=0;i<fList.size();i++) {
 					fList.get(i).setBno(bno);

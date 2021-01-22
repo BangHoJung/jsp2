@@ -1,6 +1,7 @@
 package service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import dao.MemberDAO;
 import exception.MemberException;
@@ -86,13 +87,13 @@ public class MemberService {
 		}
 	}
 	
-	public ArrayList<MemberVO> searchAllMemberVO() {
+	public List<MemberVO> searchAllMemberVO() {
 		
 		return MemberDAO.getIntance().searchAllMemberVO("");
 		
 	}
 	
-	public ArrayList<MemberVO> searchNameMemberVO(String name) {
+	public List<MemberVO> searchNameMemberVO(String name) {
 		
 		return MemberDAO.getIntance().searchAllMemberVO(name);
 	}
@@ -107,13 +108,18 @@ public class MemberService {
 		}
 	}
 	
-	public boolean deleteManageMemberVO(String id) {
+	public boolean manageDeleteMemberVO(String id) {
 		try {
+			System.out.println("manageDeleteService");
 			MemberDAO.getIntance().deleteMemberVO(id);
 			return true;
 		} catch (MemberException e) {
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public List<MemberVO> manageSearchMemeber(String kind, String search) {
+		return MemberDAO.getIntance().manageSearchMember(kind,search);
 	}
 }

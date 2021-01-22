@@ -58,7 +58,7 @@
 					<%
 					if(grade.equals("master") ) {
 						%>
-						<li><a href="<%=request.getContextPath() %>/manage/member_manage.jsp">회원관리</a></li>
+						<li><a href="member_manage.do">회원관리</a></li>
 						<%
 					}
 					%>

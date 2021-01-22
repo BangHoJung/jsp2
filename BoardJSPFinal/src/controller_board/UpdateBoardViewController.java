@@ -1,6 +1,7 @@
 package controller_board;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +19,7 @@ public class UpdateBoardViewController implements Controller {
 		int bno = Integer.parseInt(request.getParameter("bno"));
 		String writer = request.getParameter("writer");
 		BoardDTO dto = BoardService.getInstance().searchBoardDTO(bno);
-		ArrayList<FileDTO> fList = BoardService.getInstance().searchFileList(bno, writer);
+		List<FileDTO> fList = BoardService.getInstance().searchFileList(bno, writer);
 		
 		request.setAttribute("dto", dto);
 		request.setAttribute("file_list", fList);

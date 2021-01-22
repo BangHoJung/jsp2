@@ -2,19 +2,19 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="db.QnaMapper">
+<mapper namespace="mapper.QnaMapper">
   	<insert id="insertQnaMapper" parameterType="dto.QnaDTO">
   		INSERT INTO qna(qid,title,content,writer) VALUES(SEQ_QID.NEXTVAL,#{title},#{content},#{writer})
   	</insert>
   	
   	<select id="searchQnaList" parameterType="Map" resultType="dto.QnaDTO">
-  		SELECT * FROM ( SELECT q.*,ROWNUM rn FROM (SELECT * FROM qna WHERE writer = #{writer} ORDER BY qid desc) q) WHERE CEIL(rn/5)=#{currPage}
+  		SELECT qid,title,content,writer,qdate,status,response FROM ( SELECT q.*,ROWNUM rn FROM (SELECT * FROM qna WHERE writer = #{writer} ORDER BY qid desc) q) WHERE CEIL(rn/5)=#{currPage}
   	</select>
   	<select id="searchQnaMasterList" parameterType="int" resultType="dto.QnaDTO">
-  		SELECT * FROM ( SELECT q.*,ROWNUM rn FROM (SELECT * FROM qna ORDER BY status asc, qid desc) q) WHERE CEIL(rn/5)=#{currPage}
+  		SELECT qid,title,content,writer,qdate,status,response FROM ( SELECT q.*,ROWNUM rn FROM (SELECT * FROM qna ORDER BY status asc, qid desc) q) WHERE CEIL(rn/5)=#{currPage}
   	</select>
   	<select id="searchNoAnswerQnaList" resultType="dto.QnaDTO">
-  		<![CDATA[SELECT * FROM ( SELECT q.*,ROWNUM rn FROM (SELECT * FROM qna ORDER BY status asc, qid desc) q) WHERE status<2]]>
+  		<![CDATA[SELECT qid,title,content,writer,qdate,status,response FROM ( SELECT q.*,ROWNUM rn FROM (SELECT * FROM qna ORDER BY status asc, qid desc) q) WHERE status<2]]>
   	</select>
   	<select id="searchQnaDTO" parameterType="int" resultType="dto.QnaDTO">
   		SELECT * FROM qna WHERE qid=#{qid}

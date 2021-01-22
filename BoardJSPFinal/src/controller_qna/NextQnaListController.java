@@ -2,6 +2,7 @@ package controller_qna;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,7 +24,7 @@ public class NextQnaListController implements Controller {
 		int nextPage = Integer.parseInt(request.getParameter("nextPage"));
 		String grade = (String)request.getSession().getAttribute("grade");
 		//2.해당 페이지 목록을 읽어옴 - list
-		ArrayList<QnaDTO> list = BoardService.getInstance().searchQnaList(writer, nextPage, grade);
+		List<QnaDTO> list = BoardService.getInstance().searchQnaList(writer, nextPage, grade);
 		//3.다음페이지 번호 / 다음페이지 없으면 0
 		if(BoardService.getInstance().searchQnaList(writer, nextPage+1, grade).size()==0) {
 			nextPage = 0;

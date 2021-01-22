@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.MemberMapper">
+  	<insert id="insertMemberVO" parameterType="vo.MemberVO">
+  		INSERT INTO MEMBER VALUES(#{id},#{pass},#{name},#{age},1)
+  	</insert>
+  	
+  	
+  	<select id="manageSearchMember" parameterType="Map" resultType="vo.MemberVO">
+  		SELECT m.id,m.pass,m.name,m.age,g.grade_name FROM MEMBER m , grade_list g WHERE m.grade = g.grade AND
+  		<choose>
+  			<when test="kind == 'id'">
+	  			m.id LIKE '%'||#{search}||'%' ORDER BY m.id ASC
+	  		</when>
+	  		<when test="kind == 'name'">
+		  		 m.name LIKE '%'||#{search}||'%' ORDER BY m.name ASC
+	  		</when>
+	  		<otherwise>
+		  		 g.grade_name LIKE '%'||#{search}||'%' ORDER BY g.grade_name ASC
+	  		</otherwise>
+  		</choose>
+  	</select>
+  	<select id="searchMemberVO" parameterType="String" resultType="vo.MemberVO">
+  		SELECT id,pass,name,age,grade_name FROM member,grade_list WHERE id = #{id} AND member.grade=grade_list.grade
+  	</select>
+  	<select id="searchMemberVOPass" parameterType="Map" resultType="vo.MemberVO">
+  		SELECT id,pass,name,age,grade_name FROM member,grade_list WHERE id = #{id} AND pass = #{pass} AND member.grade = grade_list.grade
+  	</select>
+  	<select id="searchAllMemberVO" parameterType="String" resultType="vo.MemberVO">
+  		SELECT id,pass,name,age,grade_name FROM MEMBER,GRADE_LIST WHERE member.grade = grade_list.grade AND name Like '%'||#{name}||'%'
+  	</select>
+  	
+  	
+  	<delete id="deleteMemberVO" parameterType="String">
+  		DELETE FROM MEMBER WHERE id = #{id}
+  	</delete>
+  	
+  	
+  	<update id="updateMemberVO" parameterType="vo.MemberVO">
+  		<if test="grade == null">
+  			UPDATE MEMBER SET pass = #{pass}, name = #{name}, age = #{age} WHERE id = #{id}
+  		</if>
+  		<if test="pass == null">
+  			UPDATE MEMBER SET name = #{name}, age = #{age}, grade = (SELECT grade FROM grade_list WHERE grade_name = #{grade}) WHERE id = #{id}
+  		</if>
+  	</update>
+  	<update id="updatePass" parameterType="Map">
+  		update member set pass = #{pass} where id = #{id}
+  	</update>
+  	
+</mapper>

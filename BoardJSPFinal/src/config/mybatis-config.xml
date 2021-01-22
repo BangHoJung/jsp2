@@ -15,6 +15,9 @@
     </environment>
   </environments>
   <mappers>
-    <mapper resource="db/BoardMapper.xml" />
+    <mapper resource="mapper/BoardMapper.xml" />
+    <mapper resource="mapper/CommentMapper.xml" />
+    <mapper resource="mapper/QnaMapper.xml" />
+    <mapper resource="mapper/MemberMapper.xml" />
   </mappers>
 </configuration>

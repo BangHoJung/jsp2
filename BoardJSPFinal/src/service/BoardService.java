@@ -128,5 +128,13 @@ public class BoardService {
 		return dao.deleteBoardDTO(bno);
 	}
 
+	public BoardDTO prevBoardDTO(int bno) {
+		return dao.prevBoardDTO(bno);
+	}
+
+	public BoardDTO nextBoardDTO(int bno) {
+		return dao.nextBoardDTO(bno);
+	}
+
 
 }

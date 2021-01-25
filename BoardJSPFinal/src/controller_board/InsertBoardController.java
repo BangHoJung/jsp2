@@ -68,7 +68,7 @@ public class InsertBoardController implements Controller {
 						if(idx==-1) {
 							idx = item.getName().lastIndexOf("/");
 						}
-						String fileName = item.getName().substring(idx+1);
+						String fileName = item.getName().substring(idx+1).toLowerCase();
 						//파일 경로 완성
 						//절대경로
 						File pathFile = new File(path +"\\"+writer+"\\"+fileName);

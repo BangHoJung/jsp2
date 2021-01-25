@@ -8,6 +8,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.tomcat.jni.Directory;
+
 import controller.Controller;
 import dto.FileDTO;
 import model.ModelAndView;
@@ -22,10 +24,14 @@ public class DeleteBoardController implements Controller {
 		
 		List<FileDTO> list = BoardService.getInstance().searchFileList(bno, writer);
 		for(int i=0;i<list.size();i++) {
-			File file = new File("C:\\fileupload\\" + list.get(i).getWriter() + "\\" + list.get(i).getFileName());
-			System.out.println(file.exists());
+			File file = new File("C:\\fileupload\\" + writer + "\\" + list.get(i).getFileName());
 			System.out.println(file.getAbsolutePath());
 			file.delete();
+		}
+		
+		File dir = new File("C:\\fileupload\\" + writer);
+		if(dir.listFiles().length==0) {
+			dir.delete();
 		}
 		
 		int count = BoardService.getInstance().deleteBoardDTO(bno);

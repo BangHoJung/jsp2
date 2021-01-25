@@ -41,7 +41,6 @@
 						console.log("message ="+request.responseText);
 						console.log("error ="+error);
 						console.log("status="+status);
-						<%-- location.href = "<%=session.getAttribute("last")%>"; --%>
 					}
 				});
 			<%
@@ -54,8 +53,9 @@
 				alert("로그인이 필요합니다");
 			}
 			else {
-				var data = $("#comment_form").serialize() + "&lh="+$(this).attr("id");
 				var obj = $(this);
+				var data = "cno="+obj.siblings("input").val() + "&lh="+$(this).attr("id");
+				console.log(obj.siblings("input").val());
 				$.ajax({
 					url:'update_comment_like_hate.do',
 					data : data,
@@ -84,6 +84,11 @@
 					location.reload();
 				}
 			});
+		});
+		
+		$("#file_view button").click(function() {
+			console.log($(this));
+			$(this).siblings("img").toggle();
 		});
 		
 	});
@@ -320,7 +325,9 @@
 	#file_view img{
 		width:50px;
 		height: 50px;
+		display:none;
 	}
+	
 	
 	
 </style>
@@ -333,18 +340,18 @@
 			<h2>작성글 조회</h2>
 			<form action="/process/board_write_process" method="post">
 				<table>
-					<c:if test="${sessionScope.login != null and sessionScope.login == true }">
-						<c:if test="${requestScope.dto.writer eq sessionScope.id }">
-							<tr>
-								<th></th>
-								<td>
+					<tr>
+						<th></th>
+						<td>
+							<c:if test="${sessionScope.login != null and sessionScope.login == true }">
+								<c:if test="${requestScope.dto.writer eq sessionScope.id }">
 									<a href="update_board_view.do?bno=${param.bno}&writer=${requestScope.dto.writer}" id="update" class="btn">수정</a>
 									<a href="delete_board.do?bno=${param.bno}&writer=${requestScope.dto.writer}" id="delete" class="btn">삭제</a>
-								</td>
+								</c:if>
+							</c:if>
+						</td>
 								
-							</tr>
-						</c:if>
-					</c:if>
+					</tr>
 					<tr>
 						<th>작성일</th>
 						<td>${requestScope.dto.date}</td>
@@ -388,13 +395,13 @@
 					</tr>
 					<tr>
 						<th>
-							<a href="#" class="btn" id="prev">이전글</a>
+							<a href="prev_board.do?bno=${param.bno }" class="btn" id="prev">이전글</a>
 						</th>
 						<td>
 							<a href="${sessionScope.lastBoard}" class="btn" id="list">목록으로</a>
 							<!--다음글 가져오는 쿼리문 -->
-							<!-- SELECT * FROM( SELECT ROWNUM rbrn, rb.* FROM BOARD rb) WHERE rbrn = ( SELECT rn FROM(SELECT ROWNUM rn, b.* FROM BOARD b) WHERE bno=100)+1; -->
-							<a href="#" class="btn" id="next">다음글</a>
+							<!-- SELECT * FROM( SELECT ROWNUM rbrn, rb.* FROM (SELECT * FROM board ORDER BY bno) rb)  WHERE rbrn = ( SELECT rn FROM(SELECT ROWNUM rn, b.* FROM (SELECT * FROM board ORDER BY bno) b ) WHERE bno=201 )-1; -->
+							<a href="next_board.do?bno=${param.bno }" class="btn" id="next">다음글</a>
 						</td>
 					</tr>
 				</table>
@@ -407,11 +414,9 @@
 						<a href="file_download.jsp?writer=${file.writer}&fileName=${file.fileName}">${file.writer} / ${file.fileName}</a>
 						<c:if test="${file.type eq 'image' }">
 							<button>이미지보기</button>
-							<div>
-								<img src="image_load.do?writer=${file.writer}&fileName=${file.fileName}" >
-							</div>
-							<%-- <img src="file_download.jsp?writer=${file.writer}&fileName=${file.fileName}" > --%>
+							<br><img src="image_load.do?writer=${file.writer}&fileName=${file.fileName}" >
 						</c:if>
+						<br>
 					</p>
 				</c:forEach>
 			</div>
@@ -430,23 +435,20 @@
 				</div>
 			</c:if>
 			<div id="comment_view">
-			
 				<c:forEach var="list" items="${requestScope.comment_list }">
 					<div>
-						<form id="comment_form">
-							<input type="hidden" name="cno" value="${list.cno }">
-							<h3>${list.writer}</h3>
-							<p>${list.date}</p>
-							<p>${list.content}</p>
-							<c:if test="${sessionScope.login != null and sessionScope.login == true }">
-								<c:if test="${list.writer == sessionScope.id}">
-									<a href="#">수정</a> / <a href="#">삭제</a>
-								</c:if>
-								
+						<input type="hidden" name="cno" value="${list.cno }">
+						<h3>${list.writer}</h3>
+						<p>${list.date}</p>
+						<p>${list.content}</p>
+						<c:if test="${sessionScope.login != null and sessionScope.login == true }">
+							<c:if test="${list.writer == sessionScope.id}">
+								<a href="#">수정</a> / <a href="#">삭제</a>
 							</c:if>
-							<a href="#none" class="like_hate" id="chate"><img src="${pageContext.request.contextPath}/img/hate.png"><span>${list.hate}</span></a>
-							<a href="#none" class="like_hate" id="clike"><img src="${pageContext.request.contextPath}/img/like.png"><span>${list.like}</span></a>
-						</form>
+							
+						</c:if>
+						<a href="#none" class="like_hate" id="chate"><img src="${pageContext.request.contextPath}/img/hate.png"><span>${list.hate}</span></a>
+						<a href="#none" class="like_hate" id="clike"><img src="${pageContext.request.contextPath}/img/like.png"><span>${list.like}</span></a>
 					</div>
 				</c:forEach>
 			</div>

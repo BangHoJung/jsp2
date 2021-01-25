@@ -4,6 +4,8 @@ import controller_board.BoardViewController;
 import controller_board.DeleteBoardController;
 import controller_board.InsertBoardController;
 import controller_board.InsertCommentController;
+import controller_board.NextBoardController;
+import controller_board.PrevBoardController;
 import controller_board.UpdateBoardViewController;
 import controller_board.UpdateCommentLikeHateController;
 import controller_board.UpdateLikeHateController;
@@ -111,6 +113,12 @@ public class HandlerMapping {
 			break;
 		case "manage_delete_member.do":
 			controller = new ManageDeleteMemberController();
+			break;
+		case "prev_board.do":
+			controller = new PrevBoardController();
+			break;
+		case "next_board.do":
+			controller = new NextBoardController();
 			break;
 		}
 		return controller;

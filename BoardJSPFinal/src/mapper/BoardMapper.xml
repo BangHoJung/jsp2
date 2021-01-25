@@ -38,6 +38,12 @@
   	<select id="searchFileList" parameterType="Map" resultType="dto.FileDTO">
   		SELECT * FROM board_file_list WHERE bno=#{bno} AND writer = #{writer}
   	</select>
+  	<select id="prevBoardDTO" parameterType="int" resultType="dto.BoardDTO">
+  		SELECT bno,title,bdate,bcount,writer,content,blike,bhate FROM( SELECT ROWNUM rbrn, rb.* FROM (SELECT * FROM board ORDER BY bno) rb)  WHERE rbrn = ( SELECT rn FROM(SELECT ROWNUM rn, b.* FROM (SELECT * FROM board ORDER BY bno) b ) WHERE bno=#{bno} )+1
+  	</select>
+  	<select id="nextBoardDTO" parameterType="int" resultType="dto.BoardDTO">
+  		SELECT bno,title,bdate,bcount,writer,content,blike,bhate FROM( SELECT ROWNUM rbrn, rb.* FROM (SELECT * FROM board ORDER BY bno) rb)  WHERE rbrn = ( SELECT rn FROM(SELECT ROWNUM rn, b.* FROM (SELECT * FROM board ORDER BY bno) b ) WHERE bno=#{bno} )-1
+  	</select>
   	
   	
   	<update id="addBoardCount" parameterType="int">

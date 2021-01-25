@@ -113,6 +113,15 @@ public class BoardDAO_mapper {
 		return session.delete("mapper.BoardMapper.deleteBoardDTO",bno);
 	}
 	
+	public BoardDTO prevBoardDTO(int bno) {
+		return session.selectOne("mapper.BoardMapper.prevBoardDTO",bno);
+	}
+	
+	public BoardDTO nextBoardDTO(int bno) {
+		return session.selectOne("mapper.BoardMapper.nextBoardDTO",bno);
+	}
+
+	
 //	Comment
 	
 	public int insertBoardComment(CommentDTO dto) {
@@ -212,6 +221,9 @@ public class BoardDAO_mapper {
 		map.put("status", status);
 		return session.update("mapper.QnaMapper.updateQnaStatus",map);
 	}
+
+
+
 	
 
 	
